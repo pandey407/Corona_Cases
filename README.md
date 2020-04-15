@@ -32,9 +32,9 @@ For the data of the cases, the application uses the API from https://github.com/
  - flutter_spinkit: ^4.1.2
 
 ## Build Instructions
-$ git clone https://github.com/pandey407/Corona_Cases.git
-$ cd Corona_Cases
-$ flutter pub get
-$ flutter run -d <device>
+$ git clone https://github.com/pandey407/Corona_Cases.git<br>
+$ cd Corona_Cases<br>
+$ flutter pub get<br>
+$ flutter run -d <device><br>
 
 
