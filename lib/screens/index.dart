@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
   int nepalTests;
   int numberOfCountries;
   List countries = [];
-  List followinglist;
+  List<String> followinglist= [] ;
   
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -80,25 +80,7 @@ class _HomeState extends State<Home> {
     }
   }
 
- /*Future getFollowData(follow) async {
-    http.Response response = await  http.get('https://corona.lmao.ninja/countries/'+follow);
-    if (response.statusCode >= 200 && response.statusCode <= 299) {
-      Map<String, dynamic> country = jsonDecode(response.body);
-      setState(() {
-          followinglist.add(Following(
-                      cases: country['cases'],
-                      country: country['country'],
-                      critical: country['critical'],
-                      deaths: country['deaths'],
-                      recovered: country['recovered'],
-                      todayCases: country['todayCases'],
-                      todayDeaths: country['todayDeaths'],
-                      isFollowed: country['isFollowed'],
-                      flag: NetworkImage(country['countryInfo']['flag'])));    
-      });
-    }
-  }*/
-
+ 
   
   @override
   void initState() {
@@ -110,19 +92,7 @@ class _HomeState extends State<Home> {
     Timer.periodic(Duration(hours: 3), (Timer t) => getNepalData());
     super.initState();
   }
-  /*@override
-  void didChangeDependencies() {
-    myfollow= Provider.of<FollowingData>(context).names;
-    if(followinglist!=null)
-      followinglist.forEach((country){
-      myfollow.forEach((f){
-      if(f!=country.country)
-        getFollowData(f);
-     });
-      });
-
-    super.didChangeDependencies();
-  }*/
+  
   
   @override
   Widget build(BuildContext context) {
@@ -131,7 +101,6 @@ class _HomeState extends State<Home> {
     final data = Provider.of<DataChanger>(context);
     bool isGlobal = data.isglobal;
     followinglist = Provider.of<FollowingData>(context).names;
-    //print(followinglist);
     return RefreshIndicator(
       key: _refreshIndicatorKey,
       onRefresh: _refresh,

@@ -13,8 +13,8 @@ class Countries extends StatefulWidget {
   final List countriesList;
   final bool isDark;
   final List followed;
-  
-    // assign countriesList to a mutable variable so that I can edit it when changing states
+
+  // assign countriesList to a mutable variable so that I can edit it when changing states
   @override
   _CountriesState createState() => _CountriesState();
 }
@@ -66,72 +66,59 @@ class _CountriesState extends State<Countries> {
 
   @override
   void initState() {
-    myfollowed = widget.followed;
-        print(myfollowed);
-    filteredCountries = widget.countriesList;
-      filteredCountries.forEach((country) {
-        country['isFollowed']=false;
-        myfollowed.forEach((followed){
-          if(followed.toUpperCase()==country['country'].toUpperCase())
-          {
-            country['isFollowed']=true;
-          }
-        });
-      });
     super.initState();
+    myfollowed = widget.followed;
+    filteredCountries = widget.countriesList;
+    filteredCountries.forEach((country) {
+      country['isFollowed'] = false;
+      myfollowed.forEach((followed) {
+        if (followed.toUpperCase() == country['country'].toUpperCase()) {
+          country['isFollowed'] = true;
+        }
+      });
+    });
   }
 
-@override
+  @override
   void didChangeDependencies() {
-        var pendingAddition= [];
-        List<Following> followingcountries = Provider.of<FollowingData>(context).followings;
-     filteredCountries.forEach((country){
-      if(country['isFollowed'])
-      {
-          if(followingcountries==null){
-                      var newFollow = Following(
-                      cases: country['cases'],
-                      country: country['country'],
-                      critical: country['critical'],
-                      deaths: country['deaths'],
-                      recovered: country['recovered'],
-                      todayCases: country['todayCases'],
-                      todayDeaths: country['todayDeaths'],
-                      isFollowed: country['isFollowed'],
-                      flag: NetworkImage(country['countryInfo']['flag']));
-                      Provider.of<FollowingData>(context, listen: false).follow(newFollow);
-            }
-            else{
-               followingcountries.forEach((f){
-            if(f.country!=country['country'])
-            {
-                      var newFollow = Following(
-                      cases: country['cases'],
-                      country: country['country'],
-                      critical: country['critical'],
-                      deaths: country['deaths'],
-                      recovered: country['recovered'],
-                      todayCases: country['todayCases'],
-                      todayDeaths: country['todayDeaths'],
-                      isFollowed: country['isFollowed'],
-                      flag: NetworkImage(country['countryInfo']['flag']));
-                      pendingAddition.add(newFollow);            }
-        });
-        pendingAddition.forEach((addition){
-      Provider.of<FollowingData>(context, listen: false).follow(addition);
-   });
-   }
-}
-});       
-    
     super.didChangeDependencies();
+    filteredCountries = widget.countriesList;
+    myfollowed = widget.followed;
+    List<Following> followingcountries =
+        Provider.of<FollowingData>(context).followings;
+    print(followingcountries.length);
+    List<Following> toadd = [];
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      if (followingcountries.length == 0) {
+      filteredCountries.forEach((country) {
+        if (country['isFollowed']) {
+          var newFollow = Following(
+              cases: country['cases'],
+              country: country['country'],
+              critical: country['critical'],
+              deaths: country['deaths'],
+              recovered: country['recovered'],
+              todayCases: country['todayCases'],
+              todayDeaths: country['todayDeaths'],
+              isFollowed: country['isFollowed'],
+              flag: NetworkImage(country['countryInfo']['flag']));
+          //print(country['country']);
+          toadd.add(newFollow);
+        }
+        //else{toadd.add(newFollow);}
+      });
+      //print(toadd.length);
+      toadd.forEach((f) async{
+        if (!followingcountries.contains(f)) {
+          await Provider.of<FollowingData>(context, listen: false).follow(f);
+        }
+      });
+      }
+    });
   }
- 
 
   @override
   Widget build(BuildContext context) {
-            List<Following> followingcountries = Provider.of<FollowingData>(context).followings;
-    print(followingcountries);
     return Scaffold(
       appBar: AppBar(
         title: isSearching
@@ -172,7 +159,7 @@ class _CountriesState extends State<Countries> {
           Padding(
             padding: EdgeInsets.only(right: 8.0),
             child: toggleAppBarIcon(),
-          ) 
+          )
         ],
       ),
       body: Column(
@@ -210,8 +197,9 @@ class CountryDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   List<Following> followingcountries = Provider.of<FollowingData>(context).followings;
-   /**/
+    List<Following> followingcountries =
+        Provider.of<FollowingData>(context).followings;
+    /**/
     return Container(
       width: double.infinity,
       margin: EdgeInsets.all(15),
@@ -246,29 +234,29 @@ class CountryDetails extends StatelessWidget {
                         color: Colors.green,
                       ),
                 onPressed: () {
-                  if(!country['isFollowed'])
-                  {
-                      var newFollow = Following(
-                      cases: country['cases'],
-                      country: country['country'],
-                      critical: country['critical'],
-                      deaths: country['deaths'],
-                      recovered: country['recovered'],
-                      todayCases: country['todayCases'],
-                      todayDeaths: country['todayDeaths'],
-                      isFollowed: country['isFollowed'],
-                      flag: NetworkImage(country['countryInfo']['flag']));
-                      toggle();
-                      Provider.of<FollowingData>(context, listen: false).follow(newFollow);
-                  }
-                  else{
+                  if (!country['isFollowed']) {
+                    var newFollow = Following(
+                        cases: country['cases'],
+                        country: country['country'],
+                        critical: country['critical'],
+                        deaths: country['deaths'],
+                        recovered: country['recovered'],
+                        todayCases: country['todayCases'],
+                        todayDeaths: country['todayDeaths'],
+                        isFollowed: country['isFollowed'],
+                        flag: NetworkImage(country['countryInfo']['flag']));
                     toggle();
-                     //Provider.of<FollowingData>(context, listen: false).unfollow(following)
+                    Provider.of<FollowingData>(context, listen: false)
+                        .follow(newFollow);
+                  } else {
+                    toggle();
+                    //Provider.of<FollowingData>(context, listen: false).unfollow(following)
                     followingcountries.forEach((following) {
-                    //if(country['country'].toUpperCase()==following.country.toUpperCase())
-                    Provider.of<FollowingData>(context, listen: false).unfollow(following);
-                     });
-                  } 
+                      //if(country['country'].toUpperCase()==following.country.toUpperCase())
+                      Provider.of<FollowingData>(context, listen: false)
+                          .unfollow(following);
+                    });
+                  }
                 },
               )
             ],
@@ -277,28 +265,42 @@ class CountryDetails extends StatelessWidget {
           Divider(color: Colors.blueGrey[200], thickness: .5),
           SizedBox(height: 15),
           singlerow('cases', context),
-          SizedBox(height: 5,),
-           singlerow('deaths', context),
-          SizedBox(height: 5,),
-           singlerow('recovered', context),
-          SizedBox(height: 5,),
-           singlerow('todayCases', context),
-          SizedBox(height: 5,),
-           singlerow('todayDeaths', context),
-          SizedBox(height: 5,),
-           singlerow('critical', context),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
+          singlerow('deaths', context),
+          SizedBox(
+            height: 5,
+          ),
+          singlerow('recovered', context),
+          SizedBox(
+            height: 5,
+          ),
+          singlerow('todayCases', context),
+          SizedBox(
+            height: 5,
+          ),
+          singlerow('todayDeaths', context),
+          SizedBox(
+            height: 5,
+          ),
+          singlerow('critical', context),
+          SizedBox(
+            height: 5,
+          ),
         ],
       ),
     );
   }
-  Widget singlerow(String key, BuildContext context)
-  {
-    return Row(children: <Widget>[
-            Text(AppLocalizations.of(context).translate(key)+':',
-            style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
-            SizedBox(width:10),
-            Text('${country[key]}',style: TextStyle(fontSize: 18)),
-          ],);
+
+  Widget singlerow(String key, BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Text(AppLocalizations.of(context).translate(key) + ':',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        SizedBox(width: 10),
+        Text('${country[key]}', style: TextStyle(fontSize: 18)),
+      ],
+    );
   }
 }

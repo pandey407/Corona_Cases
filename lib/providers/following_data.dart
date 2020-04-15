@@ -7,10 +7,10 @@ class FollowingData extends ChangeNotifier {
   List<Following> _followings = [];
   FollowingData data;
   List<Following> get followings => _followings;
-  List<String> _names;
+  List<String> _names = [];
   int get totalFollowings => _followings.length;
   SharedPreferences _prefs;
-  List<String> get names=>_names;
+  List<String> get names => _names;
   String key='follow';
   _initPrefs() async{
     if(_prefs==null)
@@ -18,27 +18,28 @@ class FollowingData extends ChangeNotifier {
   }
 
   FollowingData(){
-    _names=[];
     _loadFromPrefs();
     notifyListeners();
   }
 
   _loadFromPrefs() async{
     await _initPrefs();
-    _names=_prefs.getStringList(key);
+    _names= _prefs.getStringList(key) ?? List<String>();
     notifyListeners();
   }
 
   _saveToPrefs() async{
     await _initPrefs();
-    _prefs.setStringList(key, _names);
+    await _prefs.setStringList(key, _names);
   }
 
-  void follow(Following country) {
+  Future follow(Following country) async{
     _followings.add(country);
       if(!_names.contains(country.country))
-        _names.add(country.country);
-    _saveToPrefs();
+        {
+          _names.add(country.country);
+          _saveToPrefs();
+        }
     //print(_names);
     notifyListeners();
   }
@@ -48,11 +49,9 @@ class FollowingData extends ChangeNotifier {
     names.forEach((f){
       if(f==country.country)
         _names.remove(f);
-         print(_names);
+        _saveToPrefs();
     });
-     
-    _saveToPrefs();
-    //print(_names);
+    
     notifyListeners();
     }
     
