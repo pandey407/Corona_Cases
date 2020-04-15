@@ -1,10 +1,28 @@
 # Corona_Cases
 This is a live COVID-19 Cases tracking application built using <a href="https://flutter.dev/">Flutter</a>.<br>
 For the data of the cases, the application uses the API from https://github.com/NovelCOVID/API<br>
+
+## Snaps
+<p float="left">
+  <img src="https://github.com/pandey407/Corona_Cases/blob/master/screenshots/home.png" width="250" />
+  <img src="https://github.com/pandey407/Corona_Cases/blob/master/screenshots/countries.png" width="250" />
+  <img src="https://github.com/pandey407/Corona_Cases/blob/master/screenshots/drawer.png" width="250" />
+</p>
+<p float="left">
+   <img src="https://github.com/pandey407/Corona_Cases/blob/master/screenshots/theme.png" width="250" />
+   <img src="https://github.com/pandey407/Corona_Cases/blob/master/screenshots/language.png" width="250" /> 
+   <img src="https://github.com/pandey407/Corona_Cases/blob/master/screenshots/symptoms_nepali.png" width="250" />
+</p>
+<p float= "left">
+ <img src="https://github.com/pandey407/Corona_Cases/blob/master/screenshots/prevention_nepali.png" width="250" />
+ <img src="https://github.com/pandey407/Corona_Cases/blob/master/screenshots/following.png" width="250" />
+ </p>
+
+
 ## Requirements
  - [Dart SDK](https://dart.dev/get-dart)
  - [Flutter](flutter.dev)
- - IDE of your choosing 
+ - IDE of your choosing
 
 ## Dependencies
  - font_awesome_flutter: ^8.7.0
