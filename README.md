@@ -18,6 +18,13 @@ For the data of the cases, the application uses the API from https://github.com/
  <img src="https://github.com/pandey407/Corona_Cases/blob/master/screenshots/following.png" width="250" />
  </p>
 
+## Features
+- [Live Updates of COVID-19 cases all around the world]
+- [Bi-lingual support(English/Nepali)]
+- [Dual theme modes]
+- [Screen toggle for Nepal Cases and Global Cases]
+- [Country wise alphabetical data]
+- [Following countries can be added for easy access]
 
 ## Requirements
  - [Dart SDK](https://dart.dev/get-dart)
