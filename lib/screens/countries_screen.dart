@@ -1,3 +1,4 @@
+import 'package:covid/bloc_navigation_bloc/navigation_bloc.dart';
 import 'package:covid/extensions/string_extension.dart';
 import 'package:covid/providers/following_data.dart';
 import 'package:covid/translator/app_translations.dart';
@@ -8,7 +9,7 @@ import 'package:covid/providers/following.dart';
 
 bool isSearching = false;
 
-class Countries extends StatefulWidget {
+class Countries extends StatefulWidget with NavigationStates {
   Countries({this.countriesList, this.isDark, this.followed});
   final List countriesList;
   final bool isDark;
@@ -86,33 +87,32 @@ class _CountriesState extends State<Countries> {
     myfollowed = widget.followed;
     List<Following> followingcountries =
         Provider.of<FollowingData>(context).followings;
-    print(followingcountries.length);
     List<Following> toadd = [];
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (followingcountries.length == 0) {
-      filteredCountries.forEach((country) {
-        if (country['isFollowed']) {
-          var newFollow = Following(
-              cases: country['cases'],
-              country: country['country'],
-              critical: country['critical'],
-              deaths: country['deaths'],
-              recovered: country['recovered'],
-              todayCases: country['todayCases'],
-              todayDeaths: country['todayDeaths'],
-              isFollowed: country['isFollowed'],
-              flag: NetworkImage(country['countryInfo']['flag']));
-          //print(country['country']);
-          toadd.add(newFollow);
-        }
-        //else{toadd.add(newFollow);}
-      });
-      //print(toadd.length);
-      toadd.forEach((f) async{
-        if (!followingcountries.contains(f)) {
-          await Provider.of<FollowingData>(context, listen: false).follow(f);
-        }
-      });
+        filteredCountries.forEach((country) {
+          if (country['isFollowed']) {
+            var newFollow = Following(
+                cases: country['cases'],
+                country: country['country'],
+                critical: country['critical'],
+                deaths: country['deaths'],
+                recovered: country['recovered'],
+                todayCases: country['todayCases'],
+                todayDeaths: country['todayDeaths'],
+                isFollowed: country['isFollowed'],
+                flag: NetworkImage(country['countryInfo']['flag']));
+            //print(country['country']);
+            toadd.add(newFollow);
+          }
+          //else{toadd.add(newFollow);}
+        });
+        //print(toadd.length);
+        toadd.forEach((f) async {
+          if (!followingcountries.contains(f)) {
+            await Provider.of<FollowingData>(context, listen: false).follow(f);
+          }
+        });
       }
     });
   }
@@ -235,6 +235,7 @@ class CountryDetails extends StatelessWidget {
                       ),
                 onPressed: () {
                   if (!country['isFollowed']) {
+                    toggle();
                     var newFollow = Following(
                         cases: country['cases'],
                         country: country['country'],
@@ -245,7 +246,7 @@ class CountryDetails extends StatelessWidget {
                         todayDeaths: country['todayDeaths'],
                         isFollowed: country['isFollowed'],
                         flag: NetworkImage(country['countryInfo']['flag']));
-                    toggle();
+
                     Provider.of<FollowingData>(context, listen: false)
                         .follow(newFollow);
                   } else {

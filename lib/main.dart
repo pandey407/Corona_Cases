@@ -1,10 +1,10 @@
 import 'package:covid/providers/data_changer.dart';
+import 'package:covid/sidebar/sidebar_layout.dart';
 import 'package:covid/translator/language_changer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:covid/constants.dart';
 import 'package:covid/providers/following_data.dart';
-import 'package:covid/screens/index.dart';
 import 'package:provider/provider.dart';
 import 'package:covid/providers/theme_changer.dart';
 import 'package:covid/translator/app_translations.dart';
@@ -61,7 +61,7 @@ class MaterialAppWithTheme extends StatelessWidget {
         return supportedLocales.first;
       },
       theme: theme.darkTheme ? kDarkTheme : kLightTheme,
-      home: Home(),
+      home: SideBarLayout(),
       debugShowCheckedModeBanner: false,
     );
   }
